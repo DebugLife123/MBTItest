@@ -11,7 +11,7 @@ import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
 onMounted(() => {
-  if (userStore.isAuthenticated()) {
+  if (userStore.isAuthenticated) {
     userStore.fetchCurrentUser()
   }
 })

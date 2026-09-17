@@ -14,6 +14,10 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item command="history">测评历史</el-dropdown-item>
+                  <el-dropdown-item command="growth">成长中心</el-dropdown-item>
+                  <el-dropdown-item command="career">职业建议</el-dropdown-item>
+                  <el-dropdown-item command="compatibility">性格匹配</el-dropdown-item>
+                  <el-dropdown-item command="export">导出历史</el-dropdown-item>
                   <el-dropdown-item command="admin" v-if="userStore.user?.role === 'ADMIN'">
                     管理后台
                   </el-dropdown-item>
@@ -24,7 +28,7 @@
           </div>
         </div>
       </el-header>
-      
+
       <el-main>
         <el-row :gutter="20">
           <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
@@ -55,7 +59,7 @@
               </div>
             </el-card>
           </el-col>
-          
+
           <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
             <el-card class="stats-card" shadow="hover">
               <template #header>
@@ -86,7 +90,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 import { assessmentApi } from '@/api/assessment'
 
@@ -115,27 +118,30 @@ const loadStats = async () => {
   }
 }
 
-const startTest = async () => {
-  try {
-    const res = await assessmentApi.startAttempt()
-    if (res.code === 0 && res.data) {
-      router.push('/assessment')
-    } else {
-      ElMessage.error(res.message || '创建测评失败')
-    }
-  } catch (error: any) {
-    ElMessage.error(error.message || '创建测评失败')
-  }
+const startTest = () => {
+  router.push('/assessment')
 }
 
 const viewHistory = () => {
   router.push('/history')
 }
 
-const handleCommand = (command: string) => {
+const handleCommand = async (command: string) => {
   switch (command) {
     case 'history':
       router.push('/history')
+      break
+    case 'growth':
+      router.push('/user-center?tab=growth')
+      break
+    case 'career':
+      router.push('/user-center?tab=career')
+      break
+    case 'compatibility':
+      router.push('/user-center?tab=matching')
+      break
+    case 'export':
+      router.push('/user-center?tab=export')
       break
     case 'admin':
       router.push('/admin')

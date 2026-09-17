@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface TestResultRepository extends JpaRepository<TestResult, Long> {
     Page<TestResult> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
     Optional<TestResult> findByAttemptId(Long attemptId);
+
+    // 管理后台需要的方法
+    void deleteByAttemptId(Long attemptId);
 }

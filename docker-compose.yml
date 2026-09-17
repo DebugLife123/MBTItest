@@ -12,7 +12,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_dev_password}
       TZ: Asia/Shanghai
     command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-time-zone=+08:00"]
-    ports: ["3306:3306"]
+    ports: ["${MYSQL_PORT:-13306}:3306"]
     volumes: ["mysql-data:/var/lib/mysql"]
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
@@ -27,7 +27,9 @@ services:
     container_name: mbti-redis
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-redis_dev_password}"]
-    ports: ["6379:6379"]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_dev_password}
+    ports: ["${REDIS_PORT:-16379}:6379"]
     volumes: ["redis-data:/data"]
     healthcheck:
       test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD ping | grep PONG"]
@@ -52,7 +54,7 @@ services:
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_dev_password}
       TZ: Asia/Shanghai
-    ports: ["8080:8080"]
+    ports: ["${BACKEND_PORT:-8080}:8080"]
     depends_on:
       mysql: { condition: service_healthy }
       redis: { condition: service_healthy }
@@ -68,7 +70,7 @@ services:
     build: ./frontend
     container_name: mbti-frontend
     restart: unless-stopped
-    ports: ["5173:80"]
+    ports: ["${FRONTEND_PORT:-5173}:80"]
     depends_on:
       backend: { condition: service_healthy }
     networks: [mbti-network]

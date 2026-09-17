@@ -12,3 +12,5 @@ frontend/dist/
 .env.*
 !.env.example
 volumes/
+backend/logs/
+frontend/coverage/

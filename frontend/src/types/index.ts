@@ -51,7 +51,7 @@ export interface MbtiQuestion {
   content: string
   optionA: string
   optionB: string
-  answerType: 'A' | 'B'
+  answerType: 'E' | 'I' | 'S' | 'N' | 'T' | 'F' | 'J' | 'P'
   sortOrder: number
 }
 

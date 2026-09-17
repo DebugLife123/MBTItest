@@ -59,7 +59,7 @@
             </el-card>
             
             <el-card class="actions-card" shadow="hover" style="margin-top: 20px;">
-              <el-button type="primary" @click="$router.push('/home')" style="width: 100%;">
+              <el-button type="primary" @click="$router.push('/assessment')" style="width: 100%;">
                 重新测评
               </el-button>
               <el-button @click="$router.push('/history')" style="width: 100%; margin-top: 12px;">

@@ -16,7 +16,8 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(length = 50)
+    /** 对应历史库列 real_name */
+    @Column(name = "real_name", length = 50)
     private String nickname;
 
     @Column(length = 100)
@@ -29,17 +30,22 @@ public class User {
     @Column(nullable = false, length = 20)
     private UserRole role = UserRole.USER;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled = Boolean.TRUE;
+
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
+
+    @Column(name = "create_time", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public enum UserRole {
-        USER, ADMIN
+        STUDENT, TEACHER, USER, ADMIN
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -60,6 +66,12 @@ public class User {
 
     public UserRole getRole() { return role; }
     public void setRole(UserRole role) { this.role = role; }
+
+    public Boolean getEnabled() { return enabled; }
+    public void setEnabled(Boolean enabled) { this.enabled = enabled; }
+
+    public LocalDateTime getLastLoginAt() { return lastLoginAt; }
+    public void setLastLoginAt(LocalDateTime lastLoginAt) { this.lastLoginAt = lastLoginAt; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
