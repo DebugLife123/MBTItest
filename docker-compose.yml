@@ -1,0 +1,82 @@
+name: mbti-ai-assessment
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mbti-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-mbti_ai}
+      MYSQL_USER: ${MYSQL_USER:-mbti}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mbti_dev_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_dev_password}
+      TZ: Asia/Shanghai
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-time-zone=+08:00"]
+    ports: ["3306:3306"]
+    volumes: ["mysql-data:/var/lib/mysql"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+    networks: [mbti-network]
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: mbti-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-redis_dev_password}"]
+    ports: ["6379:6379"]
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks: [mbti-network]
+
+  backend:
+    build: ./backend
+    container_name: mbti-backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${MYSQL_DATABASE:-mbti_ai}
+      DB_USERNAME: ${MYSQL_USER:-mbti}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-mbti_dev_password}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_dev_password}
+      TZ: Asia/Shanghai
+    ports: ["8080:8080"]
+    depends_on:
+      mysql: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+    networks: [mbti-network]
+
+  frontend:
+    build: ./frontend
+    container_name: mbti-frontend
+    restart: unless-stopped
+    ports: ["5173:80"]
+    depends_on:
+      backend: { condition: service_healthy }
+    networks: [mbti-network]
+
+networks:
+  mbti-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
