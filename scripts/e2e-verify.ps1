@@ -167,6 +167,40 @@ $updatedPersonality = Assert-ApiOk (Json 'PUT' "/admin/personalities/$typeCode" 
 } $adminToken) 'admin update personality'
 Assert-True ($updatedPersonality.typeCode -eq $typeCode) 'admin personality update persists'
 
+# AI capability flow (mock provider is deterministic and keeps this suite offline)
+$aiStatus = Assert-ApiOk (Json 'GET' '/ai/status' $null $tokenA) 'AI status'
+Assert-True ($aiStatus.enabled -eq $true) 'AI capability is enabled'
+Assert-True ([bool]$aiStatus.activeProvider) 'AI status exposes active provider'
+
+$chat = Assert-ApiOk (Json 'POST' '/ai/chat' @{ sessionId=$null; message='请结合我的 MBTI 类型给出职业行动建议' } $tokenA) 'AI chat'
+Assert-True ($chat.sessionId -gt 0) 'AI chat returns a session id'
+Assert-True ([bool]$chat.reply) 'AI chat returns a non-empty reply'
+
+$chatSession = Assert-ApiOk (Json 'GET' "/ai/sessions/$($chat.sessionId)" $null $tokenA) 'AI session detail'
+Assert-True ($chatSession.messages.Count -eq 2) 'AI session stores the user and assistant exchange'
+Assert-True ($chatSession.messages[0].role -eq 'USER') 'AI session first message is from the user'
+Assert-True ($chatSession.messages[1].role -eq 'ASSISTANT') 'AI session second message is from the assistant'
+
+$continuedChat = Assert-ApiOk (Json 'POST' '/ai/chat' @{ sessionId=$chat.sessionId; message='继续给出两周执行计划' } $tokenA) 'AI continued chat'
+Assert-True ($continuedChat.sessionId -eq $chat.sessionId) 'AI continued chat reuses the session'
+
+$aiSessions = Assert-ApiOk (Json 'GET' '/ai/sessions' $null $tokenA) 'AI session list'
+Assert-True ($aiSessions.Count -ge 1) 'AI session list contains the conversation'
+
+$ssePayloadFile = [System.IO.Path]::GetTempFileName()
+try {
+  [System.IO.File]::WriteAllText($ssePayloadFile, '{"sessionId":null,"message":"请流式分析求职优势"}', [System.Text.UTF8Encoding]::new($false))
+  $sseLines = & curl.exe -sS -N --max-time 30 -X POST "$base/ai/chat/stream" `
+    -H "Authorization: Bearer $tokenA" -H 'Accept: text/event-stream' -H 'Content-Type: application/json' `
+    --data-binary "@$ssePayloadFile"
+  $sseText = $sseLines -join "`n"
+  Assert-True ([bool]$sseText) 'AI SSE returns a non-empty event stream'
+  Assert-True ($sseText -match 'event:delta|event: delta') 'AI SSE emits delta events'
+  Assert-True ($sseText -match 'event:done|event: done') 'AI SSE emits a done event'
+} finally {
+  Remove-Item -LiteralPath $ssePayloadFile -Force -ErrorAction SilentlyContinue
+}
+
 $health = Json 'GET' '/health'
 Assert-True ($health.Status -eq 200 -and $health.Body.code -eq 0) 'public health endpoint is reachable'
 

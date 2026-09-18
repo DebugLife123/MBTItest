@@ -53,4 +53,24 @@ describe('Router guards', () => {
     await router.push('/admin')
     expect(router.currentRoute.value.path).toBe('/admin')
   })
+
+  it('redirects unauthenticated users away from the AI chat', async () => {
+    const router = createAppRouter(createMemoryHistory())
+    await router.push('/ai-chat')
+    expect(router.currentRoute.value.path).toBe('/login')
+  })
+
+  it('blocks non-admin users from AI team analysis', async () => {
+    setAuth('USER')
+    const router = createAppRouter(createMemoryHistory())
+    await router.push('/admin/ai-analysis')
+    expect(router.currentRoute.value.path).toBe('/home')
+  })
+
+  it('allows admins to open AI team analysis', async () => {
+    setAuth('ADMIN')
+    const router = createAppRouter(createMemoryHistory())
+    await router.push('/admin/ai-analysis')
+    expect(router.currentRoute.value.path).toBe('/admin/ai-analysis')
+  })
 })
