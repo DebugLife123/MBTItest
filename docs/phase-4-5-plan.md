@@ -59,7 +59,7 @@ Phase 4-5 已实现并通过真实 Docker 容器端到端验证。
 
 ### 真实端到端验证
 
-`scripts/e2e-verify.ps1` 在当前 Docker Compose 环境执行并通过 119 项断言：
+`scripts/e2e-verify.ps1` 在当前 Docker Compose 环境执行，并输出实际通过的断言总数：
 
 - 注册、登录、`/auth/me`、刷新令牌
 - 两个用户各自完成 36 题测评

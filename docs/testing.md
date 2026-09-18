@@ -76,7 +76,7 @@ pwsh -NoProfile -File ./scripts/e2e-verify.ps1
 9. 人格解析读取与更新
 10. 公共健康接口
 
-当前真实 Docker 环境结果：119 项断言全部通过。
+真实 Docker 环境以脚本运行时输出的实际断言总数为准；断言集覆盖基础业务与 AI 全链路。
 
 ## CI 对应关系
 

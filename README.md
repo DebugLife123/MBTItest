@@ -20,8 +20,11 @@
 - 测评历史、成长轨迹、职业建议、双人性格兼容度
 - 用户 CSV 导出（UTF-8 BOM）
 - 管理后台：统计、用户管理、题目 CRUD、人格类型 CRUD、分析图表
+- AI 智能咨询：结合最近测评结果的多轮问答、SSE 流式输出、会话持久化与历史管理
+- AI 团队分析：管理员按真实测评类型生成团队画像、沟通风险与协作建议，并保留分析历史
+- AI Provider 可插拔：`mock` 离线演示、DeepSeek、OpenAI Compatible；未配置密钥时自动回退 mock 且前端明确提示
 - Redis 限流、统一异常、结构化日志、Actuator 健康检查
-- Flyway V1/V2 初始化结构与迁移数据
+- Flyway V1/V2/V3 初始化结构、种子数据与 AI 持久化模型
 
 ## 一键启动
 
@@ -41,6 +44,16 @@ docker compose up --build -d
 - OpenAPI JSON：<http://localhost:8080/v3/api-docs>
 
 默认管理员：`admin / admin123`。生产环境请通过 `.env` 覆盖数据库、Redis 和 JWT 配置。
+
+启用真实 AI 模型时，在 `.env` 中至少配置：
+
+```env
+AI_PROVIDER=deepseek
+AI_API_KEY=sk-你的密钥
+AI_MODEL=deepseek-chat
+```
+
+未配置密钥时系统保留完整的 mock 全链路，便于离线演示和测试；它不会被描述成真实模型输出。
 
 停止服务：
 
@@ -77,7 +90,7 @@ cd frontend && npm ci && npm run type-check && npm test -- --run && npm run buil
 pwsh -NoProfile -File ./scripts/e2e-verify.ps1
 ```
 
-脚本覆盖注册、登录、刷新、双用户 36 题测评、结果、成长、职业建议、兼容度、CSV BOM、管理员统计与 CRUD。当前真实容器验证结果为 119 项断言全部通过。
+脚本覆盖注册、登录、刷新、双用户 36 题测评、结果、成长、职业建议、兼容度、CSV BOM、管理员统计与 CRUD，以及 AI 状态、同步/流式咨询、会话续聊、团队分析、历史记录和 403 权限边界。脚本会在当前容器环境中输出实际断言总数，不写死数字。
 
 ## 数据库迁移
 
@@ -85,6 +98,7 @@ pwsh -NoProfile -File ./scripts/e2e-verify.ps1
 
 - `V1__init_schema.sql`：完整表结构与索引
 - `V2__seed_data.sql`：管理员、8 个维度、36 道题、16 种人格类型
+- `V3__ai_capability.sql`：AI 会话、消息与团队分析记录表
 
 Flyway 在后端启动时自动执行迁移，无需手工建表。
 

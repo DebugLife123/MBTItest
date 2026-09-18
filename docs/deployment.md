@@ -85,10 +85,11 @@ curl -I http://localhost:5173/
 ```text
 backend/src/main/resources/db/migration/
 ├── V1__init_schema.sql
-└── V2__seed_data.sql
+├── V2__seed_data.sql
+└── V3__ai_capability.sql
 ```
 
-V1 建立用户、维度、题目、测评尝试、答案、结果与人格解析表及索引；V2 写入管理员、8 个维度、36 道题和 16 种人格类型。
+V1 建立用户、维度、题目、测评尝试、答案、结果与人格解析表及索引；V2 写入管理员、8 个维度、36 道题和 16 种人格类型；V3 建立 AI 会话、消息与团队分析记录表。
 
 如需从空库重新迁移：
 
@@ -128,3 +129,16 @@ docker compose up -d --build
 6. 将 Actuator 管理端口与业务端口隔离
 7. 在 Nginx 添加完整 CSP 与更严格的响应头
 8. 使用 CI 产出的不可变镜像标签，而非仅依赖 `latest`
+
+
+## AI Provider
+
+默认 `AI_PROVIDER=mock`，可在无密钥情况下演示完整 AI 交互链路。接入真实模型时设置：
+
+```env
+AI_PROVIDER=deepseek
+AI_API_KEY=sk-...
+AI_MODEL=deepseek-chat
+```
+
+也支持 `openai-compatible`，通过 `AI_BASE_URL`、`AI_API_KEY`、`AI_MODEL` 指向兼容 OpenAI Chat Completions 的服务。
