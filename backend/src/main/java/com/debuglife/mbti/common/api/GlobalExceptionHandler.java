@@ -33,6 +33,13 @@ public class GlobalExceptionHandler {
         ProblemDetail problem = problem(HttpStatus.UNAUTHORIZED, "BAD_CREDENTIALS", "用户名或密码错误", request);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
     }
+
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    ResponseEntity<ProblemDetail> handleAccessDenied(org.springframework.security.access.AccessDeniedException ex,
+                                                       HttpServletRequest request) {
+        ProblemDetail problem = problem(HttpStatus.FORBIDDEN, "FORBIDDEN", "无权访问该资源", request);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ProblemDetail> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> fieldErrors = new LinkedHashMap<>();

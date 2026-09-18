@@ -41,6 +41,9 @@ spring:
           time_zone: Asia/Shanghai
         order_inserts: true
         order_updates: true
+  mvc:
+    async:
+      request-timeout: 5m
   jackson:
     default-property-inclusion: non_null
     time-zone: Asia/Shanghai
@@ -100,3 +103,12 @@ app:
       enabled: ${RATE_LIMIT_ENABLED:true}
       capacity: 120
       refill-seconds: 60
+  ai:
+    enabled: ${AI_ENABLED:true}
+    provider: ${AI_PROVIDER:mock}
+    base-url: ${AI_BASE_URL:https://api.deepseek.com}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:deepseek-chat}
+    timeout-seconds: ${AI_TIMEOUT_SECONDS:60}
+    max-history-messages: ${AI_MAX_HISTORY_MESSAGES:20}
+    mock-delay-millis: ${AI_MOCK_DELAY_MILLIS:0}
