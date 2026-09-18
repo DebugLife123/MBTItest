@@ -14,3 +14,6 @@ frontend/dist/
 volumes/
 backend/logs/
 frontend/coverage/
+
+# Local scratch files
+.tmp_*
