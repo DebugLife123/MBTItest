@@ -30,6 +30,7 @@
         <el-button type="primary" @click="$router.push('/admin/users')">用户管理</el-button>
         <el-button type="success" @click="$router.push('/admin/analytics')">数据分析</el-button>
         <el-button type="warning" @click="$router.push('/admin/questions')">题目管理</el-button>
+        <el-button type="primary" plain @click="$router.push('/admin/ai-analysis')">AI 团队分析</el-button>
         <el-button type="info" @click="$router.push('/history')">测评记录</el-button>
       </div>
     </el-card>

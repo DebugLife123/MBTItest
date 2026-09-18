@@ -65,6 +65,9 @@
               <el-button @click="$router.push('/history')" style="width: 100%; margin-top: 12px;">
                 查看历史
               </el-button>
+              <el-button type="success" @click="askAi" style="width: 100%; margin-top: 12px;">
+                AI 深度解读
+              </el-button>
             </el-card>
           </el-col>
         </el-row>
@@ -91,6 +94,15 @@ const router = useRouter()
 const loading = ref(true)
 const result = ref<TestResult | null>(null)
 const chartRef = ref<HTMLElement>()
+
+const askAi = () => {
+  router.push({
+    path: '/ai-chat',
+    query: {
+      prompt: `请结合我的 ${result.value?.typeCode} 测评结果，分析职业优势、适合方向与下一步行动。`
+    }
+  })
+}
 
 const loadResult = async () => {
   const resultId = Number(route.params.id)

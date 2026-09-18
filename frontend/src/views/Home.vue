@@ -14,6 +14,7 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item command="history">测评历史</el-dropdown-item>
+                  <el-dropdown-item command="ai">AI 智能咨询</el-dropdown-item>
                   <el-dropdown-item command="growth">成长中心</el-dropdown-item>
                   <el-dropdown-item command="career">职业建议</el-dropdown-item>
                   <el-dropdown-item command="compatibility">性格匹配</el-dropdown-item>
@@ -130,6 +131,9 @@ const handleCommand = async (command: string) => {
   switch (command) {
     case 'history':
       router.push('/history')
+      break
+    case 'ai':
+      router.push('/ai-chat')
       break
     case 'growth':
       router.push('/user-center?tab=growth')

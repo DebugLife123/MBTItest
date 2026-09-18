@@ -9,6 +9,7 @@
           </div>
           <div class="header-actions">
             <el-button @click="$router.push('/history')">测评历史</el-button>
+            <el-button type="primary" plain @click="$router.push('/ai-chat')">AI 智能咨询</el-button>
             <el-button type="primary" @click="$router.push('/assessment')">重新测评</el-button>
           </div>
         </div>
