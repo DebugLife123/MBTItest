@@ -15,4 +15,11 @@ public class ChatRequest {
     public void setSessionId(Long sessionId) { this.sessionId = sessionId; }
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
+
+    /** 供审计日志使用：消息内容仅记录长度，不落明文 */
+    @Override
+    public String toString() {
+        return "ChatRequest{sessionId=" + sessionId
+                + ", messageLen=" + (message == null ? 0 : message.length()) + '}';
+    }
 }
