@@ -102,6 +102,9 @@ management:
   health:
     redis:
       enabled: true
+    # 邮件未启用时不做连接探测，避免 /actuator/health 出现无关的 DOWN 细节
+    mail:
+      enabled: false
   metrics:
     export:
       prometheus:
