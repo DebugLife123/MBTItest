@@ -59,6 +59,21 @@ spring:
   jackson:
     default-property-inclusion: non_null
     time-zone: Asia/Shanghai
+  mail:
+    host: ${MAIL_HOST:smtp.qq.com}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          socketfactory:
+            class: javax.net.ssl.SSLSocketFactory
 
 server:
   port: ${SERVER_PORT:8080}
@@ -115,6 +130,9 @@ app:
       enabled: ${RATE_LIMIT_ENABLED:true}
       capacity: 120
       refill-seconds: 60
+  mail:
+    enabled: ${MAIL_ENABLED:false}
+    from: ${MAIL_FROM:}
   ai:
     enabled: ${AI_ENABLED:true}
     provider: ${AI_PROVIDER:mock}

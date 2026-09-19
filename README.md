@@ -13,6 +13,131 @@
 | 测试 | JUnit 5、Mockito、MockMvc、Vitest、Vue Test Utils |
 | 交付 | Docker Compose、多阶段镜像、Nginx、GitHub Actions |
 
+## 系统架构
+
+```mermaid
+flowchart LR
+    subgraph Browser["浏览器"]
+        UI["Vue 3 + Element Plus<br/>ECharts 可视化"]
+    end
+
+    subgraph Gateway["Nginx (前端容器)"]
+        NGX["静态资源<br/>/api 反向代理"]
+    end
+
+    subgraph Backend["Spring Boot 3.5 (后端容器)"]
+        SEC["Security / JWT / 限流"]
+        API["REST /api/v1"]
+        AOP["审计日志切面<br/>@AuditAction"]
+        CACHE["Redis Cache<br/>统计/分布缓存"]
+        AI["Spring AI<br/>SSE 流式"]
+        MAIL["异步邮件通知"]
+        JPA["Spring Data JPA"]
+    end
+
+    subgraph Data["数据层"]
+        DB[("MySQL 8.4<br/>Flyway 迁移")]
+        RD[("Redis 7.4<br/>缓存 + 限流")]
+    end
+
+    subgraph Ext["外部服务"]
+        LLM["LLM Provider<br/>DeepSeek / OpenAI"]
+        SMTP["SMTP 邮件<br/>(可选)"]
+    end
+
+    UI --> NGX --> SEC --> API
+    API --> AOP
+    API --> CACHE
+    API --> AI
+    API --> MAIL
+    AOP --> JPA
+    CACHE <--> RD
+    AI --> LLM
+    MAIL --> SMTP
+    JPA --> DB
+    SEC --> RD
+```
+
+## 数据库设计（核心表）
+
+```mermaid
+erDiagram
+    sys_user ||--o{ test_attempt : "发起"
+    test_attempt ||--o{ test_answer : "作答"
+    test_attempt ||--o| test_result : "生成"
+    mbti_dimension ||--o{ mbti_question : "归属"
+    mbti_question ||--o{ test_answer : "被答"
+    mbti_personality ||--o{ test_result : "判定为"
+    sys_user ||--o{ ai_chat_session : "咨询"
+    ai_chat_session ||--o{ ai_chat_message : "包含"
+    sys_user ||--o{ sys_audit_log : "产生"
+
+    sys_user {
+        bigint id PK
+        varchar username
+        varchar password_hash
+        varchar nickname
+        varchar email
+        varchar role
+    }
+    test_attempt {
+        bigint id PK
+        bigint user_id FK
+        varchar status
+        varchar result_type
+        datetime completed_at
+    }
+    test_answer {
+        bigint id PK
+        bigint attempt_id FK
+        bigint question_id FK
+        varchar answer
+    }
+    test_result {
+        bigint id PK
+        bigint attempt_id FK
+        bigint user_id FK
+        varchar type_code
+        int e_score
+        int i_score
+    }
+    mbti_question {
+        bigint id PK
+        bigint dimension_id FK
+        text content
+        varchar option_a
+        varchar option_b
+    }
+    mbti_personality {
+        bigint id PK
+        varchar type_code
+        varchar type_name
+        text career_suggestions
+    }
+    ai_chat_session {
+        bigint id PK
+        bigint user_id FK
+        varchar title
+        varchar personality_type
+        varchar provider
+    }
+    ai_chat_message {
+        bigint id PK
+        bigint session_id FK
+        varchar role
+        text content
+    }
+    sys_audit_log {
+        bigint id PK
+        bigint user_id FK
+        varchar action
+        varchar path
+        varchar ip
+        bit success
+        bigint cost_ms
+    }
+```
+
 ## 已实现能力
 
 - 用户注册、登录、JWT 访问令牌与刷新令牌
@@ -24,7 +149,11 @@
 - AI 团队分析：管理员按真实测评类型生成团队画像、沟通风险与协作建议，并保留分析历史
 - AI Provider 可插拔：`mock` 离线演示、DeepSeek、OpenAI Compatible、`spring-ai`；Spring AI 通过 `ChatClient` 统一接入 OpenAI-compatible 模型，未配置密钥时自动回退 mock 且前端明确提示
 - Redis 限流、统一异常、结构化日志、Actuator 健康检查
-- Flyway V1/V2/V3 初始化结构、种子数据与 AI 持久化模型
+- Flyway V1/V2/V3/V4 初始化结构、种子数据、AI 持久化模型与审计日志表
+- 操作审计日志：AOP 切面 + `sys_audit_log` 表，管理端分页查询与筛选
+- 管理端统计缓存：Redis `CacheManager`，统计/分布接口 `@Cacheable`，测评提交自动失效
+- 异步邮件通知：测评完成后 `@Async` 发送结果邮件，未配置 SMTP 自动降级为日志
+
 
 ## 一键启动
 

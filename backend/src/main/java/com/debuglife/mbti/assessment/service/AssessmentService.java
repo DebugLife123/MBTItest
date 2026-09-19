@@ -31,17 +31,23 @@ public class AssessmentService {
     private final TestAttemptRepository attemptRepository;
     private final TestAnswerRepository answerRepository;
     private final TestResultRepository resultRepository;
+    private final com.debuglife.mbti.common.notification.NotificationService notificationService;
+    private final com.debuglife.mbti.auth.repository.UserRepository userRepository;
     private final MbtiPersonalityRepository personalityRepository;
 
     public AssessmentService(MbtiQuestionRepository questionRepository,
                              TestAttemptRepository attemptRepository,
                              TestAnswerRepository answerRepository,
                              TestResultRepository resultRepository,
-                             MbtiPersonalityRepository personalityRepository) {
+                             MbtiPersonalityRepository personalityRepository,
+            com.debuglife.mbti.common.notification.NotificationService notificationService,
+            com.debuglife.mbti.auth.repository.UserRepository userRepository) {
         this.questionRepository = questionRepository;
         this.attemptRepository = attemptRepository;
         this.answerRepository = answerRepository;
         this.resultRepository = resultRepository;
+        this.notificationService = notificationService;
+        this.userRepository = userRepository;
         this.personalityRepository = personalityRepository;
     }
 
@@ -182,7 +188,11 @@ public class AssessmentService {
         result.setFScore(fScore);
         result.setJScore(jScore);
         result.setPScore(pScore);
-        return resultRepository.save(result);
+        TestResult saved = resultRepository.save(result);
+        // 异步发送结果通知（邮件未启用时自动降级为日志，不影响主流程）
+        userRepository.findById(attempt.getUserId()).ifPresent(u ->
+                notificationService.sendAssessmentCompleted(u, typeCode, personality.getTypeName()));
+        return saved;
     }
 
     private String oppositeLetter(String letter) {
