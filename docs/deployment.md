@@ -142,3 +142,16 @@ AI_MODEL=deepseek-chat
 ```
 
 也支持 `openai-compatible`，通过 `AI_BASE_URL`、`AI_API_KEY`、`AI_MODEL` 指向兼容 OpenAI Chat Completions 的服务。
+
+如果希望通过 Spring AI 统一抽象调用 OpenAI-compatible 模型，可设置：
+
+```env
+AI_PROVIDER=spring-ai
+AI_SPRING_MODEL_CHAT=openai
+AI_API_KEY=sk-...
+AI_BASE_URL=https://api.deepseek.com
+AI_MODEL=deepseek-chat
+AI_TEMPERATURE=0.7
+```
+
+默认 `AI_SPRING_MODEL_CHAT=none`，因此无密钥启动时不会加载 Spring AI 的真实聊天模型客户端；Compose 会给 Spring AI 的可选模型自动配置一个本地 dummy key，避免无密钥启动失败，不会发起外部请求。配置真实密钥后重启后端即可切换。

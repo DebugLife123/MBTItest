@@ -1,6 +1,18 @@
 spring:
   application:
     name: mbti-ai-backend
+  ai:
+    # Spring AI stays disabled in the default offline mock mode.
+    # Set AI_SPRING_MODEL_CHAT=openai with AI_PROVIDER=spring-ai to enable it.
+    model:
+      chat: ${AI_SPRING_MODEL_CHAT:none}
+    openai:
+      api-key: ${SPRING_AI_OPENAI_API_KEY:${AI_API_KEY:dummy}}
+      base-url: ${AI_BASE_URL:https://api.deepseek.com}
+      chat:
+        options:
+          model: ${AI_MODEL:deepseek-chat}
+          temperature: ${AI_TEMPERATURE:0.7}
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:mbti_ai}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME:mbti}

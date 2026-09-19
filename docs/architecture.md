@@ -53,7 +53,8 @@ Spring Boot
 AI 模块已经落地，设计上将确定性测评事实与生成式建议严格分层：
 
 - `ai`：Provider 路由、提示词组装、多轮上下文、SSE 流式响应、会话与团队分析持久化
-- Provider：`mock`、`deepseek`、`openai-compatible`；未配置密钥时自动回退 mock 并在状态接口显式暴露
+- Provider：`mock`、`deepseek`、`openai-compatible`、`spring-ai`；其中 `spring-ai` 基于 Spring AI `ChatClient`/`ChatClient.Builder` 接入 OpenAI-compatible 模型。未配置密钥时自动回退 mock 并在状态接口显式暴露
+- `AiChatService` 负责会话上下文、提示词组装、Provider 调用和持久化；Spring AI 只负责模型调用抽象，不侵入业务领域服务
 - 模型调用期间不持有数据库事务，采用“准备会话、调用模型、保存结果”三段短事务
 - 测评计分与人格结论仍由规则引擎和数据库负责，AI 不直接修改测评事实数据
 - 当前可直接扩展 RAG、异步任务队列与 token/成本观测，不影响测评主链路

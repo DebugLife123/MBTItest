@@ -7,7 +7,7 @@
 | 层次 | 技术 |
 | --- | --- |
 | 前端 | Vue 3、TypeScript、Vite、Pinia、Vue Router、Element Plus、ECharts |
-| 后端 | Java 17、Spring Boot 3.5、Spring Security、Spring Data JPA、Bean Validation |
+| 后端 | Java 17、Spring Boot 3.5、Spring AI 1.1.8（ChatClient）、Spring Security、Spring Data JPA、Bean Validation |
 | 数据 | MySQL 8.4、Redis 7.4、Flyway |
 | API | REST `/api/v1`、统一响应体、RFC 7807 ProblemDetail、OpenAPI |
 | 测试 | JUnit 5、Mockito、MockMvc、Vitest、Vue Test Utils |
@@ -22,7 +22,7 @@
 - 管理后台：统计、用户管理、题目 CRUD、人格类型 CRUD、分析图表
 - AI 智能咨询：结合最近测评结果的多轮问答、SSE 流式输出、会话持久化与历史管理
 - AI 团队分析：管理员按真实测评类型生成团队画像、沟通风险与协作建议，并保留分析历史
-- AI Provider 可插拔：`mock` 离线演示、DeepSeek、OpenAI Compatible；未配置密钥时自动回退 mock 且前端明确提示
+- AI Provider 可插拔：`mock` 离线演示、DeepSeek、OpenAI Compatible、`spring-ai`；Spring AI 通过 `ChatClient` 统一接入 OpenAI-compatible 模型，未配置密钥时自动回退 mock 且前端明确提示
 - Redis 限流、统一异常、结构化日志、Actuator 健康检查
 - Flyway V1/V2/V3 初始化结构、种子数据与 AI 持久化模型
 
@@ -45,12 +45,23 @@ docker compose up --build -d
 
 默认管理员：`admin / admin123`。生产环境请通过 `.env` 覆盖数据库、Redis 和 JWT 配置。
 
-启用真实 AI 模型时，在 `.env` 中至少配置：
+启用真实 AI 模型时，可继续使用原生 OpenAI-compatible Provider：
 
 ```env
 AI_PROVIDER=deepseek
 AI_API_KEY=sk-你的密钥
 AI_MODEL=deepseek-chat
+```
+
+也可以启用 Spring AI `ChatClient` 适配层：
+
+```env
+AI_PROVIDER=spring-ai
+AI_SPRING_MODEL_CHAT=openai
+AI_API_KEY=sk-你的密钥
+AI_BASE_URL=https://api.deepseek.com
+AI_MODEL=deepseek-chat
+AI_TEMPERATURE=0.7
 ```
 
 未配置密钥时系统保留完整的 mock 全链路，便于离线演示和测试；它不会被描述成真实模型输出。

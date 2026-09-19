@@ -57,6 +57,9 @@ services:
       AI_PROVIDER: ${AI_PROVIDER:-mock}
       AI_BASE_URL: ${AI_BASE_URL:-https://api.deepseek.com}
       AI_API_KEY: ${AI_API_KEY:-}
+      # Spring AI needs a non-blank connection key even when mock mode is active.
+      # The harmless dummy value prevents optional audio auto-config from failing startup.
+      SPRING_AI_OPENAI_API_KEY: ${AI_API_KEY:-dummy}
       AI_MODEL: ${AI_MODEL:-deepseek-chat}
       AI_TIMEOUT_SECONDS: ${AI_TIMEOUT_SECONDS:-60}
       AI_MAX_HISTORY_MESSAGES: ${AI_MAX_HISTORY_MESSAGES:-20}
