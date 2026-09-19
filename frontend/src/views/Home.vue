@@ -25,6 +25,11 @@
             <template #title>测评历史</template>
           </el-menu-item>
 
+          <el-menu-item index="types">
+            <el-icon><Collection /></el-icon>
+            <template #title>人格类型</template>
+          </el-menu-item>
+
           <el-menu-item index="ai">
             <el-icon><ChatLineRound /></el-icon>
             <template #title>AI 智能咨询</template>
@@ -222,6 +227,7 @@ import MbtiTag from '@/components/MbtiTag.vue'
 import * as echarts from 'echarts'
 import {
   Clock,
+  Collection,
   ChatLineRound,
   TrendCharts,
   Suitcase,
@@ -346,6 +352,7 @@ const formatDate = (iso: string) =>
 const handleMenuSelect = async (index: string) => {
   switch (index) {
     case 'history': router.push('/history'); break
+    case 'types': router.push('/types'); break
     case 'ai': router.push('/ai-chat'); break
     case 'growth': router.push('/user-center?tab=growth'); break
     case 'career': router.push('/user-center?tab=career'); break
@@ -432,7 +439,6 @@ onBeforeUnmount(() => {
 
 /* 导航菜单 */
 .aside-menu {
-  flex: 1;
   border-right: none;
   padding: 8px;
   background: transparent;
