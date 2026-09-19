@@ -11,7 +11,9 @@ import com.debuglife.mbti.assessment.repository.TestAttemptRepository;
 import com.debuglife.mbti.assessment.repository.TestResultRepository;
 import com.debuglife.mbti.auth.entity.User;
 import com.debuglife.mbti.auth.repository.UserRepository;
+import com.debuglife.mbti.common.config.CacheConfig;
 import com.debuglife.mbti.common.exception.BusinessException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -117,6 +119,7 @@ public class AdminService {
         userRepository.delete(user);
     }
 
+    @Cacheable(CacheConfig.CACHE_ADMIN_STATISTICS)
     @Transactional(readOnly = true)
     public UserStatistics getStatistics() {
         long totalUsers = userRepository.count();
@@ -128,6 +131,7 @@ public class AdminService {
         return new UserStatistics(totalUsers, activeUsers, totalAttempts, completedAttempts, completionRate);
     }
 
+    @Cacheable(CacheConfig.CACHE_ADMIN_DISTRIBUTION)
     @Transactional(readOnly = true)
     public List<PersonalityDistribution> getPersonalityDistribution() {
         return buildDistribution(resultRepository.findAll());

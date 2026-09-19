@@ -17,7 +17,8 @@ export const routes: RouteRecordRaw[] = [
   { path: '/admin/users', name: 'AdminUsers', component: () => import('@/views/admin/Users.vue'), meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/admin/analytics', name: 'AdminAnalytics', component: () => import('@/views/admin/Analytics.vue'), meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/admin/questions', name: 'AdminQuestions', component: () => import('@/views/admin/Questions.vue'), meta: { requiresAuth: true, requiresAdmin: true } },
-  { path: '/admin/ai-analysis', name: 'AdminAiAnalysis', component: () => import('@/views/admin/AiAnalysis.vue'), meta: { requiresAuth: true, requiresAdmin: true } }
+  { path: '/admin/ai-analysis', name: 'AdminAiAnalysis', component: () => import('@/views/admin/AiAnalysis.vue'), meta: { requiresAuth: true, requiresAdmin: true } },
+  { path: '/admin/audit-logs', name: 'AdminAuditLogs', component: () => import('@/views/admin/AuditLogs.vue'), meta: { requiresAuth: true, requiresAdmin: true } }
 ]
 
 export function createAppRouter(history = createWebHistory()): Router {

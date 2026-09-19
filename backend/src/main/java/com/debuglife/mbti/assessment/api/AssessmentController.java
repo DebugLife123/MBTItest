@@ -8,6 +8,7 @@ import com.debuglife.mbti.assessment.service.AssessmentService;
 import com.debuglife.mbti.auth.entity.User;
 import com.debuglife.mbti.auth.repository.UserRepository;
 import com.debuglife.mbti.common.api.ApiResponse;
+import com.debuglife.mbti.common.audit.AuditAction;
 import com.debuglife.mbti.common.exception.BusinessException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -46,6 +47,7 @@ public class AssessmentController {
         return ApiResponse.success(null);
     }
 
+    @AuditAction(value = "ASSESSMENT_COMPLETE", description = "提交并完成测评")
     @PostMapping("/attempts/{id}/complete")
     public ApiResponse<TestResult> completeAttempt(@PathVariable Long id) {
         return ApiResponse.success(assessmentService.completeAttempt(id, currentUserId()));

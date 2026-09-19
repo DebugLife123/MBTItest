@@ -11,7 +11,9 @@ import com.debuglife.mbti.assessment.repository.MbtiQuestionRepository;
 import com.debuglife.mbti.assessment.repository.TestAnswerRepository;
 import com.debuglife.mbti.assessment.repository.TestAttemptRepository;
 import com.debuglife.mbti.assessment.repository.TestResultRepository;
+import com.debuglife.mbti.common.config.CacheConfig;
 import com.debuglife.mbti.common.exception.BusinessException;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -102,6 +104,7 @@ public class AssessmentService {
         }
     }
 
+    @CacheEvict(cacheNames = {CacheConfig.CACHE_ADMIN_STATISTICS, CacheConfig.CACHE_ADMIN_DISTRIBUTION}, allEntries = true)
     @Transactional
     public TestResult completeAttempt(Long attemptId, Long userId) {
         TestAttempt attempt = requireOwnedInProgressAttempt(attemptId, userId);

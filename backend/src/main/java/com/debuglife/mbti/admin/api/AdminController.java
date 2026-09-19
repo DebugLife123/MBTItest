@@ -4,6 +4,7 @@ import com.debuglife.mbti.admin.dto.*;
 import com.debuglife.mbti.admin.service.AdminService;
 import com.debuglife.mbti.assessment.entity.MbtiPersonality;
 import com.debuglife.mbti.common.api.ApiResponse;
+import com.debuglife.mbti.common.audit.AuditAction;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -42,6 +43,7 @@ public class AdminController {
         return ApiResponse.success(adminService.getUserList(keyword, pageable));
     }
 
+    @AuditAction(value = "ADMIN_UPDATE_USER_STATUS", description = "变更用户状态")
     @PutMapping("/users/{id}/status")
     @Operation(summary = "更新用户状态", description = "启用或禁用指定用户")
     public ApiResponse<Void> updateUserStatus(@PathVariable Long id, @RequestParam Boolean enabled) {
@@ -49,6 +51,7 @@ public class AdminController {
         return ApiResponse.success(null);
     }
 
+    @AuditAction(value = "ADMIN_DELETE_USER", description = "删除用户")
     @DeleteMapping("/users/{id}")
     @Operation(summary = "删除用户", description = "删除用户及其测评记录，不可恢复")
     public ApiResponse<Void> deleteUser(@PathVariable Long id) {
@@ -87,12 +90,14 @@ public class AdminController {
         return ApiResponse.success(adminService.getQuestions());
     }
 
+    @AuditAction(value = "ADMIN_CREATE_QUESTION", description = "新增题目")
     @PostMapping("/questions")
     @Operation(summary = "创建题目")
     public ApiResponse<QuestionView> createQuestion(@Valid @RequestBody QuestionRequest request) {
         return ApiResponse.success(adminService.createQuestion(request));
     }
 
+    @AuditAction(value = "ADMIN_UPDATE_QUESTION", description = "修改题目")
     @PutMapping("/questions/{id}")
     @Operation(summary = "更新题目")
     public ApiResponse<QuestionView> updateQuestion(@PathVariable Long id,
@@ -100,6 +105,7 @@ public class AdminController {
         return ApiResponse.success(adminService.updateQuestion(id, request));
     }
 
+    @AuditAction(value = "ADMIN_DELETE_QUESTION", description = "删除题目")
     @DeleteMapping("/questions/{id}")
     @Operation(summary = "删除题目")
     public ApiResponse<Void> deleteQuestion(@PathVariable Long id) {
@@ -113,6 +119,7 @@ public class AdminController {
         return ApiResponse.success(adminService.getPersonalities());
     }
 
+    @AuditAction(value = "ADMIN_UPDATE_PERSONALITY", description = "修改人格类型")
     @PutMapping("/personalities/{typeCode}")
     @Operation(summary = "更新性格类型解析")
     public ApiResponse<MbtiPersonality> updatePersonality(@PathVariable String typeCode,

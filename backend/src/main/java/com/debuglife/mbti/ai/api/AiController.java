@@ -8,6 +8,7 @@ import com.debuglife.mbti.ai.dto.ChatSessionView;
 import com.debuglife.mbti.ai.provider.AiProviderFactory;
 import com.debuglife.mbti.ai.service.AiChatService;
 import com.debuglife.mbti.common.api.ApiResponse;
+import com.debuglife.mbti.common.audit.AuditAction;
 import com.debuglife.mbti.common.exception.BusinessException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,12 +60,14 @@ public class AiController {
                         : "AI 回答仅作为倾向性参考，不构成医学诊断或职业承诺"));
     }
 
+    @AuditAction(value = "AI_CHAT", description = "AI 咨询对话")
     @PostMapping("/chat")
     @Operation(summary = "发送 AI 咨询消息")
     public ApiResponse<ChatResponse> chat(@Valid @RequestBody ChatRequest request) {
         return ApiResponse.success(chatService.chat(currentUsername(), request.getSessionId(), request.getMessage()));
     }
 
+    @AuditAction(value = "AI_CHAT_STREAM", description = "AI 流式咨询")
     @PostMapping(value = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @Operation(summary = "流式发送 AI 咨询消息", description = "使用 SSE 推送 delta、done、error 事件")
     public SseEmitter stream(@Valid @RequestBody ChatRequest request) {

@@ -43,6 +43,21 @@ export interface QuestionPayload {
   sortOrder?: number
 }
 
+export interface AuditLogItem {
+  id: number
+  userId: number | null
+  username: string | null
+  action: string
+  detail: string | null
+  httpMethod: string
+  path: string
+  ip: string | null
+  success: boolean
+  errorMessage: string | null
+  costMs: number | null
+  createdAt: string
+}
+
 export const adminApi = {
   getUsers(params: { keyword?: string; page: number; size: number; sortBy?: string; direction?: string }) {
     return request.get<ApiResponse<PageResponse<UserListItem>>>('/admin/users', { params })
@@ -79,5 +94,8 @@ export const adminApi = {
   },
   updatePersonality(typeCode: string, payload: Partial<MbtiPersonality>) {
     return request.put<ApiResponse<MbtiPersonality>>(`/admin/personalities/${typeCode}`, payload)
+  },
+  getAuditLogs(params: { action?: string; username?: string; page: number; size: number }) {
+    return request.get<ApiResponse<PageResponse<AuditLogItem>>>('/admin/audit-logs', { params })
   }
 }
