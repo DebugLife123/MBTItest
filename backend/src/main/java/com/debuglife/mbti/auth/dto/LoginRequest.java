@@ -27,4 +27,9 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+    /** 日志/审计输出：密码永远不落明文 */
+    @Override
+    public String toString() {
+        return "LoginRequest{username=" + username + ", password=***}";
+    }
 }

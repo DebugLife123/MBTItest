@@ -51,4 +51,9 @@ public class RegisterRequest {
     public void setEmail(String email) {
         this.email = email;
     }
+    /** 日志/审计输出：密码永远不落明文 */
+    @Override
+    public String toString() {
+        return "RegisterRequest{username=" + username + ", nickname=" + nickname + ", email=" + email + ", password=***}";
+    }
 }
