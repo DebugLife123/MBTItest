@@ -150,10 +150,48 @@ onMounted(loadQuestions)
 </script>
 
 <style scoped>
-.questions-container { padding: 24px; }
-.page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; }
-.page-header h2 { margin: 0; font-size: 24px; font-weight: 600; }
-.page-header p { margin: 6px 0 0; color: #909399; }
-.option-tag { display: inline-flex; width: 20px; height: 20px; margin-right: 8px; border-radius: 50%; align-items: center; justify-content: center; color: #409eff; background: #ecf5ff; font-weight: 700; }
-.form-tip { color: #909399; font-size: 12px; line-height: 1.5; }
+.questions-container {
+  padding: 24px;
+  min-height: 100vh;
+  background: var(--el-bg-color-page);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.option-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  border-radius: 7px;
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.form-tip {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
 </style>

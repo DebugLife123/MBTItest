@@ -152,14 +152,33 @@ const handleRegister = async () => {
 <style scoped>
 .register-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px;
+  background:
+    radial-gradient(1100px 520px at 50% -12%, rgba(59, 99, 216, 0.10), transparent 68%),
+    var(--el-bg-color-page);
 }
 
-.register-card {
-  width: 400px;
+.register-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #3b63d8 0%, #64bcac 55%, #f28c68 100%);
+  opacity: 0.9;
+}
+
+.register-container {
+  position: relative;
+}
+
+.register-container-card {
+  width: 100%;
+  max-width: 420px;
 }
 
 .card-header {
@@ -167,28 +186,32 @@ const handleRegister = async () => {
 }
 
 .card-header h2 {
-  margin: 0 0 8px 0;
-  color: #303133;
+  margin: 0 0 8px;
+  font-size: 19px;
+  font-weight: 600;
 }
 
 .card-header p {
   margin: 0;
-  color: #909399;
-  font-size: 14px;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
 }
 
 .footer-links {
-  text-align: center;
   margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
 }
 
 .footer-links a {
-  color: #409eff;
-  text-decoration: none;
-  font-size: 14px;
+  color: var(--el-color-primary);
 }
 
 .footer-links a:hover {
   text-decoration: underline;
+}
+
+:deep(.el-form-item) {
+  margin-bottom: 20px;
 }
 </style>

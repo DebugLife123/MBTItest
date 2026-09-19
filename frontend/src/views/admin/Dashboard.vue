@@ -45,10 +45,10 @@ import { adminApi, type UserStatistics } from '@/api/admin'
 
 const statistics = ref<Partial<UserStatistics>>({})
 const statCards = computed(() => [
-  { label: '总用户数', value: statistics.value.totalUsers ?? 0, color: '#409eff', icon: User },
-  { label: '活跃用户', value: statistics.value.activeUsers ?? 0, color: '#67c23a', icon: CircleCheck },
-  { label: '总测评次数', value: statistics.value.totalAttempts ?? 0, color: '#e6a23c', icon: Document },
-  { label: '完成率', value: (statistics.value.completionRate ?? 0).toFixed(1) + '%', color: '#f56c6c', icon: TrendCharts }
+  { label: '总用户数', value: statistics.value.totalUsers ?? 0, color: '#3b63d8', icon: User },
+  { label: '活跃用户', value: statistics.value.activeUsers ?? 0, color: '#3f8f72', icon: CircleCheck },
+  { label: '总测评次数', value: statistics.value.totalAttempts ?? 0, color: '#c9843a', icon: Document },
+  { label: '完成率', value: (statistics.value.completionRate ?? 0).toFixed(1) + '%', color: '#c45656', icon: TrendCharts }
 ])
 
 const loadStatistics = async () => {
@@ -65,17 +65,79 @@ onMounted(loadStatistics)
 </script>
 
 <style scoped>
-.dashboard-container { padding: 24px; }
-.page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; }
-.page-header h2 { margin: 0; font-size: 24px; font-weight: 600; }
-.page-header p { margin: 6px 0 0; color: #909399; }
-.stat-card { margin-bottom: 20px; }
-.stat-content { display: flex; align-items: center; gap: 16px; }
-.stat-icon { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; }
-.stat-info { flex: 1; }
-.stat-value { font-size: 26px; font-weight: 700; color: #303133; margin-bottom: 4px; }
-.stat-label { font-size: 14px; color: #909399; }
-.quick-card { margin-top: 4px; }
-.card-title { font-size: 16px; font-weight: 600; }
-.quick-links { display: flex; flex-wrap: wrap; gap: 12px; }
+.dashboard-container {
+  padding: 24px;
+  min-height: 100vh;
+  background: var(--el-bg-color-page);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.stat-card {
+  margin-bottom: 20px;
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  color: #fff;
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-value {
+  margin-bottom: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  font-variant: tabular-nums;
+}
+
+.stat-label {
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.quick-card {
+  margin-top: 4px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 </style>

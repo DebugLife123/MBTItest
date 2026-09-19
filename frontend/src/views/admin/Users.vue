@@ -118,10 +118,40 @@ onMounted(loadUsers)
 </script>
 
 <style scoped>
-.users-container { padding: 24px; }
-.page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; }
-.page-header h2 { margin: 0; font-size: 24px; font-weight: 600; }
-.page-header p { margin: 6px 0 0; color: #909399; }
-.pagination-container { margin-top: 24px; display: flex; justify-content: flex-end; }
-.muted { color: #909399; font-size: 13px; }
+.users-container {
+  padding: 24px;
+  min-height: 100vh;
+  background: var(--el-bg-color-page);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.muted {
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
 </style>

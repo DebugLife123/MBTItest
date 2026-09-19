@@ -73,7 +73,9 @@
                 <el-divider />
                 <div v-if="stats.latestType" class="latest-result">
                   <div class="result-label">最近测评结果</div>
-                  <div class="result-type">{{ stats.latestType }}</div>
+                  <div class="result-type">
+                    <MbtiTag :code="stats.latestType" size="large" show-name />
+                  </div>
                   <div class="result-date">{{ stats.latestDate }}</div>
                 </div>
                 <div v-else class="no-result">
@@ -93,6 +95,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { assessmentApi } from '@/api/assessment'
+import MbtiTag from '@/components/MbtiTag.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -165,28 +168,40 @@ onMounted(() => {
 <style scoped>
 .home-container {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: var(--el-bg-color-page);
 }
 
 .el-header {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  background: var(--el-bg-color);
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  box-shadow: none;
 }
 
 .header-content {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .header-content h1 {
   margin: 0;
-  font-size: 20px;
-  color: #303133;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.header-content h1::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 3px;
+  background: var(--el-color-primary);
+  vertical-align: middle;
 }
 
 .user-info {
@@ -195,48 +210,60 @@ onMounted(() => {
 }
 
 .el-dropdown-link {
-  cursor: pointer;
   display: flex;
   align-items: center;
-  color: #606266;
+  padding: 6px 10px;
+  border-radius: var(--el-border-radius-small);
+  color: var(--el-text-color-regular);
+  cursor: pointer;
+}
+
+.el-dropdown-link:hover {
+  background: var(--el-fill-color-light);
+  color: var(--el-color-primary);
 }
 
 .el-main {
-  padding: 20px;
+  padding: 24px;
 }
 
-.welcome-card, .stats-card {
+.welcome-card,
+.stats-card {
   margin-bottom: 20px;
 }
 
 .card-header {
+  font-size: 15px;
   font-weight: 600;
-  font-size: 16px;
 }
 
 .welcome-content {
-  line-height: 1.8;
+  color: var(--el-text-color-regular);
+  line-height: 1.85;
 }
 
 .welcome-content p {
   margin: 12px 0;
-  color: #606266;
 }
 
 .welcome-content ul {
   margin: 16px 0;
-  padding-left: 24px;
+  padding-left: 22px;
 }
 
 .welcome-content li {
   margin: 8px 0;
-  color: #606266;
+}
+
+.welcome-content strong {
+  color: var(--el-text-color-primary);
+  font-weight: 600;
 }
 
 .action-buttons {
-  margin-top: 24px;
   display: flex;
   gap: 12px;
+  margin-top: 24px;
 }
 
 .stats-content {
@@ -248,20 +275,19 @@ onMounted(() => {
 }
 
 .result-label {
-  color: #909399;
-  font-size: 14px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
 }
 
 .result-type {
-  font-size: 24px;
-  font-weight: 600;
-  color: #409eff;
-  margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
 }
 
 .result-date {
-  color: #909399;
+  color: var(--el-text-color-placeholder);
   font-size: 12px;
 }
 

@@ -58,7 +58,7 @@
           
           <el-button
             v-else
-            type="success"
+            type="primary"
             :disabled="!isAllAnswered"
             :loading="submitting"
             @click="submitTest"
@@ -202,15 +202,17 @@ onMounted(() => {
 <style scoped>
 .test-container {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: var(--el-bg-color-page);
 }
 
 .el-header {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 20px 24px;
+  background: var(--el-bg-color);
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  box-shadow: none;
+  height: auto;
 }
 
 .test-header {
@@ -218,20 +220,22 @@ onMounted(() => {
 }
 
 .test-header h2 {
-  margin: 0 0 12px 0;
-  color: #303133;
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .progress-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .progress-info span {
-  color: #606266;
-  font-size: 14px;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
   white-space: nowrap;
+  font-variant: tabular-nums;
 }
 
 .progress-info .el-progress {
@@ -239,73 +243,77 @@ onMounted(() => {
 }
 
 .el-main {
-  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  padding: 40px 20px 56px;
 }
 
 .question-card {
   width: 100%;
-  max-width: 800px;
-  padding: 20px;
+  max-width: 820px;
 }
 
 .question-number {
-  color: #909399;
-  font-size: 14px;
   margin-bottom: 12px;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .question-content {
-  font-size: 18px;
-  font-weight: 500;
-  color: #303133;
-  line-height: 1.6;
   margin-bottom: 32px;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--el-text-color-primary);
 }
 
 .options {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .option-button {
   width: 100%;
   height: auto;
-  padding: 20px;
   display: flex;
   align-items: center;
   gap: 16px;
+  padding: 18px 20px;
   text-align: left;
-  border: 2px solid #dcdfe6;
-  background: #fff;
+  border: 1.5px solid var(--el-border-color);
+  border-radius: var(--el-border-radius-base);
+  background: var(--el-bg-color);
 }
 
 .option-button:hover {
-  border-color: #409eff;
+  border-color: var(--el-color-primary-light-5);
+  background: var(--el-color-primary-light-9);
 }
 
 .option-button.is-selected {
-  border-color: #409eff;
-  background: #ecf5ff;
+  border-color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
+  box-shadow: inset 0 0 0 1px var(--el-color-primary-light-5);
 }
 
 .option-label {
-  font-size: 24px;
+  min-width: 36px;
+  font-size: 19px;
   font-weight: 600;
-  color: #409eff;
-  min-width: 40px;
   text-align: center;
+  color: var(--el-color-primary);
 }
 
 .option-text {
   flex: 1;
-  font-size: 16px;
-  color: #606266;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--el-text-color-regular);
 }
 
 .navigation {
@@ -315,15 +323,15 @@ onMounted(() => {
 
 .loading-container {
   display: flex;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
   gap: 16px;
 }
 
 .loading-container p {
-  color: #909399;
-  font-size: 16px;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
 }
 </style>

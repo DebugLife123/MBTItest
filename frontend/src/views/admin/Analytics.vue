@@ -56,7 +56,7 @@ const distributionData = ref<PersonalityDistribution[]>([])
 let trendInstance: echarts.ECharts | null = null
 let chartInstance: echarts.ECharts | null = null
 
-const getProgressColor = (percentage: number) => percentage > 15 ? '#67c23a' : percentage > 8 ? '#409eff' : percentage > 4 ? '#e6a23c' : '#f56c6c'
+const getProgressColor = (percentage: number) => percentage > 15 ? '#64bcac' : percentage > 8 ? '#3b63d8' : percentage > 4 ? '#c9843a' : '#c45656'
 
 const loadAll = async () => {
   try {
@@ -95,9 +95,9 @@ const renderTrend = () => {
     xAxis: { type: 'category', data: trendData.value.map(item => item.date.slice(5)), boundaryGap: false },
     yAxis: [{ type: 'value', name: '次数' }, { type: 'value', name: '完成率', min: 0, max: 100, axisLabel: { formatter: '{value}%' } }],
     series: [
-      { name: '开始测评', type: 'line', smooth: true, data: trendData.value.map(item => item.totalAttempts), lineStyle: { color: '#409eff' }, itemStyle: { color: '#409eff' } },
-      { name: '完成测评', type: 'line', smooth: true, data: trendData.value.map(item => item.completedAttempts), lineStyle: { color: '#67c23a' }, itemStyle: { color: '#67c23a' } },
-      { name: '完成率', type: 'line', yAxisIndex: 1, smooth: true, data: trendData.value.map(item => item.completionRate), lineStyle: { color: '#e6a23c', type: 'dashed' }, itemStyle: { color: '#e6a23c' } }
+      { name: '开始测评', type: 'line', smooth: true, data: trendData.value.map(item => item.totalAttempts), lineStyle: { color: '#3b63d8' }, itemStyle: { color: '#3b63d8' } },
+      { name: '完成测评', type: 'line', smooth: true, data: trendData.value.map(item => item.completedAttempts), lineStyle: { color: '#64bcac' }, itemStyle: { color: '#64bcac' } },
+      { name: '完成率', type: 'line', yAxisIndex: 1, smooth: true, data: trendData.value.map(item => item.completionRate), lineStyle: { color: '#c9843a', type: 'dashed' }, itemStyle: { color: '#c9843a' } }
     ]
   }
   trendInstance.setOption(option, true)
@@ -122,14 +122,67 @@ onUnmounted(() => { window.removeEventListener('resize', handleResize); trendIns
 </script>
 
 <style scoped>
-.analytics-container { padding: 24px; }
-.page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; gap: 16px; }
-.page-header h2 { margin: 0; font-size: 24px; font-weight: 600; }
-.page-header p { margin: 6px 0 0; color: #909399; }
-.header-actions { display: flex; gap: 12px; align-items: center; }
-.chart-card { margin-bottom: 24px; }
-.card-header { display: flex; justify-content: space-between; align-items: center; }
-.card-title { font-size: 16px; font-weight: 600; }
-.chart, .trend-chart { width: 100%; height: 430px; }
-@media (max-width: 900px) { .page-header { align-items: flex-start; flex-direction: column; } .header-actions { flex-wrap: wrap; } }
+.analytics-container {
+  padding: 24px;
+  min-height: 100vh;
+  background: var(--el-bg-color-page);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chart-card {
+  margin-bottom: 24px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.chart,
+.trend-chart {
+  width: 100%;
+  height: 430px;
+}
+
+@media (max-width: 900px) {
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+  }
+}
 </style>

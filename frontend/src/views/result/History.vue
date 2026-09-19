@@ -13,7 +13,7 @@
           <el-table :data="results" v-loading="loading" style="width: 100%">
             <el-table-column prop="typeCode" label="性格类型" width="120">
               <template #default="{ row }">
-                <el-tag type="primary" size="large">{{ row.typeCode }}</el-tag>
+                <MbtiTag :code="row.typeCode" size="large" show-name />
               </template>
             </el-table-column>
             
@@ -55,6 +55,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { assessmentApi } from '@/api/assessment'
 import type { TestResult } from '@/types'
+import MbtiTag from '@/components/MbtiTag.vue'
 
 const router = useRouter()
 const loading = ref(true)
@@ -101,30 +102,31 @@ onMounted(() => {
 <style scoped>
 .history-container {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: var(--el-bg-color-page);
 }
 
 .el-header {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  background: var(--el-bg-color);
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  box-shadow: none;
 }
 
 .header-content {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .header-content h2 {
   margin: 0;
-  color: #303133;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .el-main {
-  padding: 20px;
+  padding: 24px;
 }
 </style>

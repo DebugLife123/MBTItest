@@ -30,17 +30,18 @@
             <el-button size="small" type="danger" plain @click="clearTypes">清空</el-button>
           </div>
           <div class="type-grid">
-            <button
+            <el-check-tag
               v-for="type in allTypes"
               :key="type"
+              :checked="!!selectedCounts[type]"
               class="type-chip"
-              :class="{ selected: selectedCounts[type] }"
+              :class="`mbti-tag--${type.toLowerCase()}`"
               @click="addType(type)"
               @contextmenu.prevent="removeType(type)"
             >
               <strong>{{ type }}</strong>
               <span>{{ selectedCounts[type] || 0 }}</span>
-            </button>
+            </el-check-tag>
           </div>
           <p class="hint">左键增加成员，右键减少。人员总数：{{ typeCodes.length }}</p>
           <el-divider />
@@ -172,27 +173,134 @@ onMounted(async () => { await loadStatus(); await loadHistory() })
 </script>
 
 <style scoped>
-.analysis-page { padding: 24px; min-height: 100vh; background: #f5f7fa; }
-.page-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; margin-bottom: 18px; }
-.page-header h1 { margin: 0; font-size: 24px; color: #25314d; }
-.page-header p { margin: 7px 0 0; color: #8b94a7; }
-.header-actions { display: flex; gap: 10px; }
-.mode-alert { margin-bottom: 18px; }
-.config-card, .report-card { margin-bottom: 20px; }
-.card-header { display: flex; align-items: center; justify-content: space-between; font-weight: 700; }
-.quick-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.type-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.type-chip { border: 1px solid #e2e7f0; background: #fff; border-radius: 10px; padding: 9px 4px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; color: #4d5870; }
-.type-chip strong { font-size: 13px; }
-.type-chip span { font-size: 11px; color: #9aa3b5; }
-.type-chip.selected { border-color: #6f9cff; background: #eef4ff; color: #2d63d8; }
-.type-chip.selected span { color: #2d63d8; }
-.hint { color: #929bad; font-size: 12px; line-height: 1.7; }
-.report-meta { display: flex; gap: 6px; }
-.report-content { min-height: 390px; color: #3b465e; line-height: 1.9; }
-.generating-panel { min-height: 390px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #778197; gap: 12px; }
-.history-card { margin-top: 0; }
-.markdown-body :deep(.md-heading) { margin: 16px 0 8px; color: #1f2b46; }
-.markdown-body :deep(.md-item) { padding-left: 6px; }
-@media (max-width: 900px) { .page-header { flex-direction: column; align-items: flex-start; } .header-actions { flex-wrap: wrap; } .type-grid { grid-template-columns: repeat(4, 1fr); } }
+.analysis-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: var(--el-bg-color-page);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin: 7px 0 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.mode-alert {
+  margin-bottom: 18px;
+}
+
+.config-card,
+.report-card {
+  margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.type-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 4px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.type-chip strong {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.type-chip span {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.72;
+  font-variant: tabular-nums;
+}
+
+.hint {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.report-meta {
+  display: flex;
+  gap: 6px;
+}
+
+.report-content {
+  min-height: 390px;
+  color: var(--el-text-color-regular);
+  line-height: 1.9;
+}
+
+.generating-panel {
+  display: flex;
+  min-height: 390px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--el-text-color-secondary);
+}
+
+.markdown-body :deep(.md-heading) {
+  margin: 16px 0 8px;
+  color: var(--el-text-color-primary);
+}
+
+.history-card {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .type-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
 </style>

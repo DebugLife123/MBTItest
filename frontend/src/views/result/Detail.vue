@@ -19,7 +19,9 @@
               </template>
               
               <div class="personality-type">
-                <div class="type-code">{{ result.typeCode }}</div>
+                <div class="type-code">
+                  <MbtiTag :code="result.typeCode" size="large" show-name />
+                </div>
                 <div class="type-name">{{ result.personality.typeName }}</div>
               </div>
               
@@ -65,7 +67,7 @@
               <el-button @click="$router.push('/history')" style="width: 100%; margin-top: 12px;">
                 查看历史
               </el-button>
-              <el-button type="success" @click="askAi" style="width: 100%; margin-top: 12px;">
+              <el-button type="primary" @click="askAi" style="width: 100%; margin-top: 12px;">
                 AI 深度解读
               </el-button>
             </el-card>
@@ -88,6 +90,7 @@ import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
 import { assessmentApi } from '@/api/assessment'
 import type { TestResult } from '@/types'
+import MbtiTag from '@/components/MbtiTag.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -176,48 +179,47 @@ onMounted(() => {
 <style scoped>
 .result-container {
   min-height: 100vh;
-  background: #f5f7fa;
+  background: var(--el-bg-color-page);
 }
 
 .el-header {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  background: var(--el-bg-color);
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  box-shadow: none;
 }
 
 .header-content {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .header-content h2 {
   margin: 0;
-  color: #303133;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .el-main {
-  padding: 20px;
+  padding: 24px;
 }
 
 .personality-type {
+  padding: 36px 0 40px;
   text-align: center;
-  padding: 40px 0;
 }
 
 .type-code {
-  font-size: 64px;
-  font-weight: 700;
-  color: #409eff;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .type-name {
-  font-size: 24px;
-  color: #303133;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .description-section {
@@ -225,27 +227,44 @@ onMounted(() => {
 }
 
 .description-section h3 {
-  color: #303133;
   margin-bottom: 12px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.description-section h3::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 14px;
+  margin-right: 8px;
+  border-radius: 2px;
+  background: var(--el-color-primary);
+  vertical-align: middle;
 }
 
 .description-section p {
-  color: #606266;
-  line-height: 1.8;
+  color: var(--el-text-color-regular);
+  line-height: 1.85;
   text-indent: 2em;
 }
 
-.dimensions-card, .actions-card {
+.dimensions-card,
+.actions-card {
   margin-bottom: 20px;
 }
 
 .loading-container {
   display: flex;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
   gap: 16px;
+}
+
+.loading-container p {
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
 }
 </style>

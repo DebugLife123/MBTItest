@@ -1,0 +1,384 @@
+@use 'sass:map';
+
+// ------------------------------------------------------------
+// 设计 token（产品层，供页面与人格标签使用）
+// ------------------------------------------------------------
+:root {
+  --app-color-primary: #3b63d8;
+  --app-color-coral: #f28c68;
+  --app-color-mint: #64bcac;
+  --app-color-ink: #1f2937;
+  --app-color-muted: #6b7280;
+  --app-color-line: #e4e9f0;
+  --app-color-page: #f2f4f7;
+  --app-color-surface: #ffffff;
+
+  --app-space-1: 4px;
+  --app-space-2: 8px;
+  --app-space-3: 12px;
+  --app-space-4: 16px;
+  --app-space-5: 20px;
+  --app-space-6: 24px;
+  --app-space-8: 32px;
+  --app-space-10: 40px;
+  --app-page-padding: 24px;
+  --app-content-width: 1180px;
+  --app-header-height: 64px;
+  --app-radius: 10px;
+  --app-duration: 0.28s;
+  --app-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --app-shadow: 0 8px 24px rgba(31, 41, 55, 0.06), 0 2px 8px rgba(31, 41, 55, 0.04);
+  --app-shadow-hover: 0 12px 28px rgba(31, 41, 55, 0.08), 0 4px 12px rgba(31, 41, 55, 0.04);
+
+  --mbti-analyst: #3b63d8;
+  --mbti-diplomat: #64bcac;
+  --mbti-sentinel: #6b7280;
+  --mbti-explorer: #f28c68;
+
+  --mbti-intj-bg: #e8eefc;
+  --mbti-intj-text: #2c4cb3;
+  --mbti-intp-bg: #eef2fb;
+  --mbti-intp-text: #3b63d8;
+  --mbti-entj-bg: #e4ebfa;
+  --mbti-entj-text: #2744a8;
+  --mbti-entp-bg: #eef1f8;
+  --mbti-entp-text: #3d5cc4;
+
+  --mbti-infj-bg: #e7f6f3;
+  --mbti-infj-text: #2f7f74;
+  --mbti-infp-bg: #eef8f6;
+  --mbti-infp-text: #3a8f84;
+  --mbti-enfj-bg: #e3f4f1;
+  --mbti-enfj-text: #2a7369;
+  --mbti-enfp-bg: #edf8f5;
+  --mbti-enfp-text: #3d9a8c;
+
+  --mbti-istj-bg: #eef1f5;
+  --mbti-istj-text: #4b5563;
+  --mbti-isfj-bg: #f1f4f7;
+  --mbti-isfj-text: #5b6573;
+  --mbti-estj-bg: #e8edf3;
+  --mbti-estj-text: #3f4b5a;
+  --mbti-esfj-bg: #f2f5f8;
+  --mbti-esfj-text: #556070;
+
+  --mbti-istp-bg: #fdeee8;
+  --mbti-istp-text: #c45c3d;
+  --mbti-isfp-bg: #fef3ee;
+  --mbti-isfp-text: #d06a4a;
+  --mbti-estp-bg: #fce8e0;
+  --mbti-estp-text: #b54f32;
+  --mbti-esfp-bg: #fef1eb;
+  --mbti-esfp-text: #c96646;
+}
+
+// ------------------------------------------------------------
+// 基础字体与留白
+// ------------------------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app,
+.app-container {
+  min-height: 100%;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  color: var(--el-text-color-primary);
+  background: var(--el-bg-color-page);
+  font-family: var(--el-font-family);
+  font-size: var(--el-font-size-base);
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+}
+
+a {
+  color: var(--el-color-primary);
+  text-decoration: none;
+  transition: color var(--app-duration) var(--app-ease);
+}
+
+a:hover {
+  color: var(--el-color-primary-light-3);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  color: var(--el-text-color-primary);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+p {
+  margin: 0;
+}
+
+#app {
+  color: var(--el-text-color-primary);
+  background: transparent;
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  text-align: initial;
+  border: 0;
+}
+
+.el-main {
+  --el-main-padding: var(--app-page-padding);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--app-space-4);
+  margin-bottom: var(--app-space-6);
+}
+
+.page-header h1,
+.page-header h2 {
+  font-size: 22px;
+}
+
+.page-header p {
+  margin-top: var(--app-space-2);
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.app-page {
+  min-height: 100vh;
+  background: var(--el-bg-color-page);
+}
+
+.el-header {
+  background: var(--el-bg-color);
+  box-shadow: var(--el-box-shadow-lighter);
+}
+
+.el-card {
+  --el-card-border-radius: var(--el-border-radius-base);
+  --el-card-padding: 20px;
+  border-color: var(--el-border-color-lighter);
+}
+
+.el-dialog {
+  --el-dialog-border-radius: var(--el-border-radius-base);
+}
+
+.el-message {
+  --el-message-bg-color: var(--el-bg-color);
+  border-radius: var(--el-border-radius-base);
+  box-shadow: var(--app-shadow);
+}
+
+.el-table {
+  --el-table-header-bg-color: var(--el-fill-color-lighter);
+  --el-table-header-text-color: var(--el-text-color-secondary);
+}
+
+.el-empty__description p {
+  color: var(--el-text-color-secondary);
+}
+
+// ------------------------------------------------------------
+// 全局过渡与 hover 微动效
+// 统一 0.28s，上移 2px，阴影柔和加深。禁止弹跳 / 发光。
+// ------------------------------------------------------------
+.el-button,
+.el-card,
+.el-tag,
+.el-input__wrapper,
+.el-textarea__inner,
+.el-select__wrapper,
+.el-radio-button__inner,
+.el-check-tag,
+.el-pagination button,
+.el-pager li,
+.el-dropdown-link,
+.el-alert,
+.el-table,
+.el-progress-bar__outer,
+.el-menu-item,
+.el-sub-menu__title {
+  transition:
+    transform var(--app-duration) var(--app-ease),
+    box-shadow var(--app-duration) var(--app-ease),
+    border-color var(--app-duration) var(--app-ease),
+    background-color var(--app-duration) var(--app-ease),
+    color var(--app-duration) var(--app-ease),
+    opacity var(--app-duration) var(--app-ease);
+}
+
+.el-button:not(.is-disabled):not(.is-link):not(.is-text):hover,
+.el-card:hover,
+.el-tag:hover,
+.el-check-tag:hover,
+.el-radio-button__original-radio:not(:disabled) + .el-radio-button__inner:hover,
+.el-pagination button:not(:disabled):hover,
+.el-pager li:not(.is-active):not(.is-disabled):hover,
+.el-dropdown-link:hover,
+.el-input__wrapper:hover,
+.el-select__wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--app-shadow-hover);
+}
+
+.el-button:not(.is-disabled):not(.is-link):not(.is-text):active,
+.el-card:active,
+.el-tag:active {
+  transform: translateY(-1px);
+  box-shadow: var(--el-box-shadow-lighter);
+}
+
+.el-button.is-link,
+.el-button.is-text {
+  transform: none;
+  box-shadow: none;
+}
+
+.el-button.is-link:hover,
+.el-button.is-text:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.el-button:focus-visible,
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focused,
+.el-textarea__inner:focus {
+  box-shadow: 0 0 0 3px var(--el-color-primary-light-8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+
+  .el-button:hover,
+  .el-card:hover,
+  .el-tag:hover,
+  .el-input__wrapper:hover,
+  .el-select__wrapper:hover {
+    transform: none;
+  }
+}
+
+// ------------------------------------------------------------
+// 16 型人格 el-tag
+// 辅助色仅用于标签与状态提示，不进入主按钮。
+// ------------------------------------------------------------
+.el-tag.mbti-tag {
+  --el-tag-border-radius: 8px;
+  height: 28px;
+  padding: 0 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  border: 0;
+  background: var(--mbti-tag-bg, var(--el-fill-color));
+  color: var(--mbti-tag-text, var(--el-text-color-primary));
+}
+
+.el-tag.mbti-tag .el-tag__content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.el-tag.mbti-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.8;
+  flex: none;
+}
+
+.el-tag.mbti-tag .mbti-tag__code {
+  font-variant: tabular-nums;
+}
+
+.el-tag.mbti-tag .mbti-tag__name {
+  letter-spacing: 0;
+  font-weight: 500;
+  opacity: 0.86;
+}
+
+.el-tag.mbti-tag.el-tag--large {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.el-tag.mbti-tag.el-tag--small {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.el-tag.mbti-tag--intj { --mbti-tag-bg: var(--mbti-intj-bg); --mbti-tag-text: var(--mbti-intj-text); }
+.el-tag.mbti-tag--intp { --mbti-tag-bg: var(--mbti-intp-bg); --mbti-tag-text: var(--mbti-intp-text); }
+.el-tag.mbti-tag--entj { --mbti-tag-bg: var(--mbti-entj-bg); --mbti-tag-text: var(--mbti-entj-text); }
+.el-tag.mbti-tag--entp { --mbti-tag-bg: var(--mbti-entp-bg); --mbti-tag-text: var(--mbti-entp-text); }
+.el-tag.mbti-tag--infj { --mbti-tag-bg: var(--mbti-infj-bg); --mbti-tag-text: var(--mbti-infj-text); }
+.el-tag.mbti-tag--infp { --mbti-tag-bg: var(--mbti-infp-bg); --mbti-tag-text: var(--mbti-infp-text); }
+.el-tag.mbti-tag--enfj { --mbti-tag-bg: var(--mbti-enfj-bg); --mbti-tag-text: var(--mbti-enfj-text); }
+.el-tag.mbti-tag--enfp { --mbti-tag-bg: var(--mbti-enfp-bg); --mbti-tag-text: var(--mbti-enfp-text); }
+.el-tag.mbti-tag--istj { --mbti-tag-bg: var(--mbti-istj-bg); --mbti-tag-text: var(--mbti-istj-text); }
+.el-tag.mbti-tag--isfj { --mbti-tag-bg: var(--mbti-isfj-bg); --mbti-tag-text: var(--mbti-isfj-text); }
+.el-tag.mbti-tag--estj { --mbti-tag-bg: var(--mbti-estj-bg); --mbti-tag-text: var(--mbti-estj-text); }
+.el-tag.mbti-tag--esfj { --mbti-tag-bg: var(--mbti-esfj-bg); --mbti-tag-text: var(--mbti-esfj-text); }
+.el-tag.mbti-tag--istp { --mbti-tag-bg: var(--mbti-istp-bg); --mbti-tag-text: var(--mbti-istp-text); }
+.el-tag.mbti-tag--isfp { --mbti-tag-bg: var(--mbti-isfp-bg); --mbti-tag-text: var(--mbti-isfp-text); }
+.el-tag.mbti-tag--estp { --mbti-tag-bg: var(--mbti-estp-bg); --mbti-tag-text: var(--mbti-estp-text); }
+.el-tag.mbti-tag--esfp { --mbti-tag-bg: var(--mbti-esfp-bg); --mbti-tag-text: var(--mbti-esfp-text); }
+
+.el-tag.mbti-tag--analyst { box-shadow: inset 0 0 0 1px rgba(59, 99, 216, 0.08); }
+.el-tag.mbti-tag--diplomat { box-shadow: inset 0 0 0 1px rgba(100, 188, 172, 0.16); }
+.el-tag.mbti-tag--sentinel { box-shadow: inset 0 0 0 1px rgba(107, 114, 128, 0.1); }
+.el-tag.mbti-tag--explorer { box-shadow: inset 0 0 0 1px rgba(242, 140, 104, 0.16); }
+
+.el-tag.status-tag--mint {
+  --el-tag-bg-color: #e8f6f3;
+  --el-tag-text-color: #2f7f74;
+  --el-tag-border-color: transparent;
+}
+
+.el-tag.status-tag--coral {
+  --el-tag-bg-color: #fdeee8;
+  --el-tag-text-color: #c45c3d;
+  --el-tag-border-color: transparent;
+}
+
+// 禁止玻璃拟态
+.el-overlay,
+.el-dialog,
+.el-drawer,
+.el-popper,
+.el-message-box {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}

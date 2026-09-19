@@ -28,7 +28,7 @@
                 <el-timeline v-if="growth.length">
                   <el-timeline-item v-for="point in [...growth].reverse()" :key="point.resultId" :timestamp="formatDate(point.createdAt)" placement="top" :type="point === growth[growth.length - 1] ? 'primary' : 'success'">
                     <div class="growth-item">
-                      <div class="growth-main"><strong>{{ point.typeCode }}</strong><span>{{ point.typeName || '性格类型' }}</span></div>
+                      <div class="growth-main"><MbtiTag :code="point.typeCode" show-name /><span>{{ point.typeName || '性格类型' }}</span></div>
                       <div class="growth-scores">
                         <span>E {{ point.eScore }}</span><span>I {{ point.iScore }}</span><span>S {{ point.sScore }}</span><span>N {{ point.nScore }}</span>
                         <span>T {{ point.tScore }}</span><span>F {{ point.fScore }}</span><span>J {{ point.jScore }}</span><span>P {{ point.pScore }}</span>
@@ -40,7 +40,7 @@
               </el-card>
 
               <el-card id="career-section" shadow="never" class="section-card">
-                <template #header><div class="card-header"><span>职业建议</span><el-tag v-if="career" type="success">{{ career.typeCode }}</el-tag></div></template>
+                <template #header><div class="card-header"><span>职业建议</span><MbtiTag v-if="career" :code="career.typeCode" /></div></template>
                 <template v-if="career">
                   <p class="summary">{{ career.summary }}</p>
                   <h4>推荐方向</h4>
@@ -89,6 +89,7 @@ import { nextTick, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { userApi, type CareerAdviceResponse, type CompatibilityResponse, type GrowthPoint } from '@/api/user'
+import MbtiTag from '@/components/MbtiTag.vue'
 
 const route = useRoute()
 const loading = ref(true)
@@ -159,35 +160,197 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.center-container { min-height: 100vh; background: #f5f7fa; }
-.el-header { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.08); display: flex; align-items: center; padding: 0 24px; }
-.header-content { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.header-content h2 { margin: 0; font-size: 22px; }
-.header-content p { margin: 5px 0 0; color: #909399; font-size: 13px; }
-.header-actions { display: flex; gap: 10px; }
-.el-main { padding: 24px; }
-.section-card { margin-bottom: 20px; }
-.card-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
-.growth-item { line-height: 1.8; }
-.growth-main { display: flex; align-items: baseline; gap: 10px; }
-.growth-main strong { font-size: 20px; color: #409eff; }
-.growth-main span { color: #606266; }
-.growth-scores { display: flex; flex-wrap: wrap; gap: 8px; color: #909399; font-size: 12px; }
-.changed { margin-top: 6px; color: #e6a23c; font-size: 13px; }
-.summary { color: #606266; line-height: 1.8; }
-.career-detail { color: #606266; line-height: 1.9; white-space: pre-line; }
-.tag-list, .match-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 18px; }
-.suggestion-list { padding-left: 20px; color: #606266; line-height: 2; }
-.compatibility-result { margin-top: 22px; text-align: center; }
-.compatibility-result h3 { margin: 12px 0 6px; }
-.compatibility-result p { color: #606266; line-height: 1.7; text-align: left; }
-.match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
-.match-grid div { padding: 10px; background: #f5f7fa; border-radius: 8px; display: flex; flex-direction: column; gap: 4px; }
-.match-grid span { color: #409eff; font-weight: 600; }
-.match-list { display: block; text-align: left; }
-.match-list h4 { margin: 14px 0 8px; font-size: 14px; }
-.match-list ul { margin: 0; padding-left: 20px; color: #606266; line-height: 1.8; }
-.export-tip { color: #909399; line-height: 1.7; margin: 0 0 16px; }
-@media (max-width: 600px) { .header-content { align-items: flex-start; flex-direction: column; } .el-header { height: auto; padding: 16px; } }
+.center-container {
+  min-height: 100vh;
+  background: var(--el-bg-color-page);
+}
+
+.el-header {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background: var(--el-bg-color);
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  box-shadow: none;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+}
+
+.header-content h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.header-content p {
+  margin: 5px 0 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.el-main {
+  padding: 24px;
+}
+
+.section-card {
+  margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.growth-item {
+  line-height: 1.8;
+}
+
+.growth-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.growth-main span {
+  color: var(--el-text-color-regular);
+}
+
+.growth-scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  font-variant: tabular-nums;
+}
+
+.growth-scores span {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--el-fill-color-light);
+}
+
+.changed {
+  margin-top: 8px;
+  color: #c45c3d;
+  font-size: 13px;
+}
+
+.summary {
+  color: var(--el-text-color-regular);
+  line-height: 1.85;
+}
+
+.career-detail {
+  color: var(--el-text-color-regular);
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+.tag-list,
+.match-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 18px;
+}
+
+.suggestion-list {
+  padding-left: 20px;
+  color: var(--el-text-color-regular);
+  line-height: 2;
+}
+
+.compatibility-result {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.compatibility-result h3 {
+  margin: 12px 0 6px;
+}
+
+.compatibility-result p {
+  color: var(--el-text-color-regular);
+  line-height: 1.75;
+  text-align: left;
+}
+
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.match-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: var(--el-border-radius-small);
+  background: var(--el-fill-color-lighter);
+}
+
+.match-grid strong {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.match-grid span {
+  color: var(--el-color-primary);
+  font-weight: 600;
+}
+
+.match-list {
+  display: block;
+  text-align: left;
+}
+
+.match-list h4 {
+  margin: 14px 0 8px;
+  font-size: 14px;
+}
+
+.match-list ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--el-text-color-regular);
+  line-height: 1.85;
+}
+
+.export-tip {
+  margin: 0 0 16px;
+  color: var(--el-text-color-secondary);
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .header-content {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .el-header {
+    height: auto;
+    padding: 16px;
+  }
+}
 </style>
 
